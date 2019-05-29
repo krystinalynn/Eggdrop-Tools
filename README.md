@@ -1,5 +1,5 @@
-# Psuedo-Eggdrop
-A script to make psuedo bots, symlinked to a single updateable core.
+# Pseudo-Eggdrop
+A script to make pseudo bots, symlinked to a single updateable core.
 
 #### Usage Instructions
 * Download, Configure and Build eggdrop from source in your home directory.
