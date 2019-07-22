@@ -9,10 +9,6 @@ mag=$'\e[1;35m'
 cyn=$'\e[1;36m'
 end=$'\e[0m'
 clear
-eggsrc() { 
- echo ${yel}Changing Directory:${end} /home/$USER/eggdrop
- cd /home/$USER/eggdrop
-}
 echo ${yel}==================================${end}
 echo ${blu}Symlink bot-setup script v1.0${end}
 echo ${yel}----------------------------------${end}
@@ -28,13 +24,13 @@ echo
 echo ${blu}What is the nickname this bot will use?${end}
 read botname
 nb() { 
- echo ${yel}Changing Directory:${end} /home/$USER/$botname
- cd /home/$USER/$botname
+ echo ${yel}Changing Directory:${end} /home/"$USER"/"$botname"
+ cd /home/"$USER"/"$botname" || exit
 }
 echo 
-echo ${blu}GREAT! I shall now create $botname for you.${end}
+echo ${blu}GREAT! I shall now create "$botname" for you.${end}
 echo 
-mkdir $botname
+mkdir "$botname"
 eggsrc
 nb
 clear
@@ -88,7 +84,7 @@ if [ "$CONF" = "y" ]; then
   echo "of your eggdrop directory." 
   echo
   #Open file descriptor
-  exec 3<> /home/$USER/$botname/$botname.conf
+  exec 3<> /home/"$USER"/"$botname"/"$botname".conf
   #Set eggdrop hashbang
   echo "#! /home/$USER/$botname/eggdrop" >&3
   echo -e '
@@ -113,7 +109,7 @@ if [ "$CONF" = "y" ]; then
   echo "What ident should this bot use? This setting has no effect if an ident daemon is running on your bot's machine."
   echo
   read ident
-  echo set username '"'$ident'"' >&3
+  echo set username '"'"$ident"'"' >&3
   #Admin Info
   clear
   eggdrop
@@ -123,7 +119,7 @@ if [ "$CONF" = "y" ]; then
   echo "This setting defines which contact person should be shown in .status, /msg help, and other places."
   echo 
   read admin 
-  echo -e set admin '"'$admin'"' >&3
+  echo -e set admin '"'"$admin"'"' >&3
   clear
   #Network Info
   eggdrop
@@ -133,7 +129,7 @@ if [ "$CONF" = "y" ]; then
   echo "${mag}Example: irc.undernet.org${end}"
   echo 
   read network 
-  echo -e set network '"'$network'"' >&3
+  echo -e set network '"'"$network"'"' >&3
   clear
   #Timezone
   eggdrop
@@ -143,7 +139,7 @@ if [ "$CONF" = "y" ]; then
   echo "${mag}Example: EST${end}"
   echo 
   read tz
-  echo -e set timezone '"'$tz'"' >&3
+  echo -e set timezone '"'"$tz"'"' >&3
   clear
   #Offset
   eggdrop
@@ -156,7 +152,7 @@ if [ "$CONF" = "y" ]; then
   echo "${blu}The offset for New York City is -4${end}"
   echo 
   read offset
-  echo -e set offset '"'$offset'"' >&3
+  echo -e set offset '"'"$offset"'"' >&3
   clear
   #Listen Address
   eggdrop
@@ -166,8 +162,8 @@ if [ "$CONF" = "y" ]; then
   echo "accessible from the internet. If it isn't, you may encounter issues getting your bot to connect properly."
   echo 
   read vhost4
-  echo -e set vhost4 '"'$vhost4'"' >&3
-  echo -e set listen-addr '"'$vhost4'"' >&3
+  echo -e set vhost4 '"'"$vhost4"'"' >&3
+  echo -e set listen-addr '"'"$vhost4"'"' >&3
   clear
   #MaxLogs
   eggdrop
@@ -178,7 +174,7 @@ if [ "$CONF" = "y" ]; then
   echo "${red}Never set this below 5.${yel} Any future decreases of this value will require a restart of your bot.${end}" 
   echo 
   read maxlogs
-  echo set max-logs $maxlogs >&3
+  echo set max-logs "$maxlogs" >&3
   clear
   #MaxLogs-Size
   eggdrop
@@ -190,7 +186,7 @@ if [ "$CONF" = "y" ]; then
   echo "If this is set to 0, it will be disabled.${end}"
   echo 
   read maxlogsize
-  echo set max-logsize $maxlogsize >&3
+  echo set max-logsize "$maxlogsize" >&3
   clear
   #Underused Settings
   echo "set quick-logs 0" >&3
@@ -221,15 +217,15 @@ if [ "$CONF" = "y" ]; then
     echo "What are the default console modes would you like to set?"
     echo 
 	read sconmode
-	echo set console '"'$sconmode'"' >&3
+	echo set console '"'"$sconmode"'"' >&3
   else 
     echo "${red}You chose to use the default console modes.${end}"
 	echo set console '"mkcoblxs"' >&3
   fi
   clear
   #Files and Directories
-  echo set userfile '"'$botname.user'"' >&3
-  echo set pidfile '"'pid.$botname'"' >&3
+  echo set userfile '"'"$botname".user'"' >&3
+  echo set pidfile '"'pid."$botname"'"' >&3
   echo set help-path '"'help/'"' >&3
   echo set text-path '"'text/'"' >&3
   echo set motd '"'text/motd'"' >&3
@@ -241,7 +237,7 @@ if [ "$CONF" = "y" ]; then
   echo "What port would you like your bot to listen on for bots and telnet users?"
   echo 
   read telnet
-  echo listen $telnet all >&3
+  echo listen "$telnet" all >&3
   clear
   #More under-used settings 
   echo "set remote-boots 2" >&3
@@ -260,7 +256,7 @@ if [ "$CONF" = "y" ]; then
   echo "set paranoid-telnet-flood 1" >&3
   echo "set ignore-time 15" >&3
   echo "set hourly-update 00" >&3
-  echo set notify-newusers '"'$owner'"' >&3
+  echo set notify-newusers '"'"$owner"'"' >&3
   echo set default-flags '"'hp'"' >&3
   echo set whois-fields '"'url birthday'"' >&3
   echo "set must-be-owner 1" >&3
@@ -279,7 +275,7 @@ if [ "$CONF" = "y" ]; then
   echo "set dns-maxsends 4" >&3
   echo "set dns-retrydelay 3" >&3
   echo "loadmodule channels" >&3
-  echo set chanfile '"'$botname.chan'"' >&3
+  echo set chanfile '"'"$botname".chan'"' >&3
   echo "set force-expire 0" >&3
   echo "set share-greet 0" >&3
   echo "set use-info 1" >&3
@@ -328,13 +324,13 @@ if [ "$CONF" = "y" ]; then
   echo "${yel}5 = Others${end}"
   echo 
   read net
-  echo set net-type $net >&3
+  echo set net-type "$net" >&3
   clear
   #Bot Nick
   eggdrop
   echo
   echo
-  echo set nick '"'$botname'"' >&3
+  echo set nick '"'"$botname"'"' >&3
   clear
   #Alt Nick
   eggdrop
@@ -343,7 +339,7 @@ if [ "$CONF" = "y" ]; then
   echo "If that nick isn't available, what alt nick should your bot use?"
   echo 
   read altnick 
-  echo set altnick '"'$altnick'"' >&3
+  echo set altnick '"'"$altnick"'"' >&3
   clear
   #Real Name
   eggdrop
@@ -352,7 +348,7 @@ if [ "$CONF" = "y" ]; then
   echo "What should your bot's Real Name/GECOS be?"
   echo 
   read realname
-  echo set realname '"'$realname'"' >&3
+  echo set realname '"'"$realname"'"' >&3
   clear
   echo 'bind evnt - init-server evnt:init_server
   
@@ -372,7 +368,7 @@ if [ "$CONF" = "y" ]; then
 	echo "${mag}Example #2 (For ZNC connections):${end} znc.ircnetwork.org:7000:user/ircnet:password"
     echo 
 	read svr
-	echo set servers '{' $svr '}' >&3
+	echo set servers '{' "$svr" '}' >&3
   else
     echo "${red}Your bot will not be connected to any networks. This makes your bot utterly worthless.${end}";
   fi
@@ -423,14 +419,14 @@ if [ "$CONF" = "y" ]; then
   echo "#loadmodule compress" >&3
   echo "set share-compressed 1" >&3
   echo "#loadmodule filesys" >&3
-  echo set files-path '"'/home/$USER/$botname/filesys'"' >&3
-  echo set incoming-path '"'/home/$USER/$botname/filesys/incoming'"' >&3
+  echo set files-path '"'/home/"$USER"/"$botname"/filesys'"' >&3
+  echo set incoming-path '"'/home/"$USER"/"$botname"/filesys/incoming'"' >&3
   echo "set upload-to-pwd 0" >&3
   echo set filedb-path '""' >&3
   echo "set max-file-users 20" >&3
   echo "set max-filesize 1024" >&3
   echo "loadmodule notes" >&3
-  echo set notefile '"'$botname.notes'"' >&3
+  echo set notefile '"'"$botname".notes'"' >&3
   echo "set max-notes 50" >&3
   echo "set note-life 60" >&3
   echo "set allow-fwd 0" >&3
@@ -458,7 +454,7 @@ if [ "$CONF" = "y" ]; then
 	███████║   ██║   ╚██████╔╝██║     
 	╚══════╝   ╚═╝    ╚═════╝ ╚═╝ ${end}"
 	echo 
-	echo Make sure your scripts are placed into /home/$USER/$botname/scripts
+	echo Make sure your scripts are placed into /home/"$USER"/"$botname"/scripts
 	echo
 	echo
 	read -n 1 -s -r -p "Press any key to continue the installation"
@@ -471,7 +467,7 @@ if [ "$CONF" = "y" ]; then
 	read instscript
     echo "#Scripts" >&3
     echo "#Use this section to load scripts into your bot." >*&3
-	echo source scripts/$instscript >&3
+	echo source scripts/"$instscript" >&3
 	clear
 	echo "Remember, you need to place this script into /home/$USER/$botname/scripts if you haven't already done so."
   else
